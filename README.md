@@ -9,4 +9,4 @@ ServiceNow API invoke
 
 
 
---> This will create a incident under the CI table name you have provided in defaults/main.yml
+--> This will pull the CRs under the CI table name you have provided in defaults/main.yml
