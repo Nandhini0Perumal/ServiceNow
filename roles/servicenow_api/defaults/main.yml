@@ -1,0 +1,8 @@
+# defaults/main.yml
+servicenow_instance: "dev12345"
+servicenow_user: "your_username"
+servicenow_password: "your_password"
+servicenow_table: "incident"
+servicenow_api_url: "https://{{ servicenow_instance }}.service-now.com/api/now/table/{{ servicenow_table }}"
+http_method: "POST"  # Or GET, PUT, DELETE depending on the operation
+api_params: {}  # Custom params for the API request

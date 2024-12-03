@@ -1,0 +1,33 @@
+# tasks/main.yml
+---
+- name: Trigger ServiceNow API request
+  uri:
+    url: "{{ servicenow_api_url }}"
+    method: "{{ http_method }}"
+    user: "{{ servicenow_user }}"
+    password: "{{ servicenow_password }}"
+    headers:
+      Content-Type: "application/json"
+    body: "{{ api_params | to_json }}"  # Serialize params to JSON
+    status_code: 200  # Expected status code; can vary for other methods
+    validate_certs: false  # Set to true if you have a valid certificate
+  register: response
+  retries: 3
+  delay: 5
+  until: response.status == 200
+  tags:
+    - servicenow
+
+- name: Handle API response
+  debug:
+    msg: "ServiceNow API response: {{ response }}"
+  when: response.status == 200
+  tags:
+    - servicenow
+
+- name: Fail if response code is not 200
+  fail:
+    msg: "Failed to trigger ServiceNow API, received response: {{ response }}"
+  when: response.status != 200
+  tags:
+    - servicenow

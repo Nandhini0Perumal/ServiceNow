@@ -1,0 +1,17 @@
+---
+- name: Trigger ServiceNow API
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    servicenow_instance: "dev12345"
+    servicenow_user: "admin"
+    servicenow_password: "admin_password"
+    servicenow_table: "incident"
+    api_params:
+      short_description: "An example incident"
+      description: "This incident was created via Ansible."
+      priority: "2"
+
+  roles:
+    - servicenow_api
