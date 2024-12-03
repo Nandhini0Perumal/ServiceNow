@@ -1,2 +1,2 @@
 # vars/main.yml
-auth_token: "{{ servicenow_user }}:{{ servicenow_password }}"  # basic auth
+auth_token: "{{ servicenow_user }}:{{ servicenow_password }}" 
