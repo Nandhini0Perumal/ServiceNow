@@ -1,5 +1,6 @@
+# playbooks/trigger_servicenow_api.yml
 ---
-- name: Trigger ServiceNow API
+- name: Fetch Change Requests for a CI from ServiceNow
   hosts: localhost
   gather_facts: no
 
@@ -7,11 +8,7 @@
     servicenow_instance: "dev12345"
     servicenow_user: "admin"
     servicenow_password: "admin_password"
-    servicenow_table: "incident"
-    api_params:
-      short_description: "An example incident"
-      description: "This incident was created via Ansible."
-      priority: "2"
+    ci_name: "CI12345"  # Provide the CI name for filtering change requests
 
   roles:
     - servicenow_api

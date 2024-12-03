@@ -2,7 +2,8 @@
 servicenow_instance: "dev12345"
 servicenow_user: "your_username"
 servicenow_password: "your_password"
-servicenow_table: "incident"
+servicenow_table: "change_request"
 servicenow_api_url: "https://{{ servicenow_instance }}.service-now.com/api/now/table/{{ servicenow_table }}"
-http_method: "POST"  # Or GET, PUT, DELETE depending on the operation
-api_params: {}  # Custom params for the API request
+http_method: "GET"
+api_params: {}  # CI filter will be added dynamically
+ci_name: ""  # CI name to filter change requests by

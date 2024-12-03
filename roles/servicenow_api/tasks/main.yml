@@ -1,6 +1,17 @@
 # tasks/main.yml
 ---
-- name: Trigger ServiceNow API request
+- name: Validate CI name is provided
+  fail:
+    msg: "CI name must be provided to fetch change requests."
+  when: ci_name == ""
+  tags:
+    - servicenow
+
+- name: Build query to filter change requests by CI
+  set_fact:
+    api_filter: "ci.name={{ ci_name }}"
+
+- name: Fetch change requests for the provided CI
   uri:
     url: "{{ servicenow_api_url }}"
     method: "{{ http_method }}"
@@ -8,9 +19,11 @@
     password: "{{ servicenow_password }}"
     headers:
       Content-Type: "application/json"
-    body: "{{ api_params | to_json }}"  # Serialize params to JSON
-    status_code: 200  # Expected status code; can vary for other methods
-    validate_certs: false  # Set to true if you have a valid certificate
+    body: "{{ api_params | to_json }}"  # Serialize params to JSON (if necessary)
+    params:
+      sysparm_query: "{{ api_filter }}"  # Filter change requests based on CI name
+    status_code: 200
+    validate_certs: false
   register: response
   retries: 3
   delay: 5
@@ -18,16 +31,16 @@
   tags:
     - servicenow
 
-- name: Handle API response
+- name: Show fetched change requests
   debug:
-    msg: "ServiceNow API response: {{ response }}"
+    msg: "Fetched change requests: {{ response.json.result }}"
   when: response.status == 200
   tags:
     - servicenow
 
 - name: Fail if response code is not 200
   fail:
-    msg: "Failed to trigger ServiceNow API, received response: {{ response }}"
+    msg: "Failed to fetch change requests, received response: {{ response }}"
   when: response.status != 200
   tags:
     - servicenow
